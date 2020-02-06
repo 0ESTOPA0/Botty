@@ -354,7 +354,7 @@ namespace MyDummy
         private void JustEnter()
         {
             //TODO
-            wait(10000);
+            wait(13000);
             DoKeyPress(WKEY, 2000);
             wait(1000);
             DoKeyPress(N3, 280);
@@ -386,11 +386,11 @@ namespace MyDummy
         bool IsInBG;
         private void WaitingToEnter()
         {
-            wait(100);
+            wait(500);
             OpenCloseWeakAuras();
-            wait(500);
+            wait(1000);
             IsInBG = CheckIsInBG();
-            wait(500);
+            wait(1000);
             if (!IsInBG)
                 TryToJoin();
             else
@@ -423,7 +423,7 @@ namespace MyDummy
         private void OpenCloseWeakAuras()
         {
             DoClick(Int32.Parse(txtXOpenCloseWA.Text), Int32.Parse(txtYOpenCloseWA.Text));
-            wait(100);
+            wait(300);
             DoClick(Int32.Parse(txtXOpenCloseWA.Text), Int32.Parse(txtYOpenCloseWA.Text));
         }
 
