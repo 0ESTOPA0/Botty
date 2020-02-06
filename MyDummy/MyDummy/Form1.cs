@@ -15,7 +15,7 @@ using System.Threading;
 
 namespace MyDummy
 {
-    public partial class Form1 : Form
+    public partial class frm1 : Form
     {
         struct loc
         {
@@ -595,6 +595,8 @@ namespace MyDummy
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tabPage1 = new System.Windows.Forms.TabPage();
             this.tabPage2 = new System.Windows.Forms.TabPage();
+            this.rbHorde = new System.Windows.Forms.RadioButton();
+            this.rbAlliance = new System.Windows.Forms.RadioButton();
             this.label39 = new System.Windows.Forms.Label();
             this.txtXInsignia = new System.Windows.Forms.TextBox();
             this.txtYInsignia = new System.Windows.Forms.TextBox();
@@ -635,8 +637,6 @@ namespace MyDummy
             this.label17 = new System.Windows.Forms.Label();
             this.label16 = new System.Windows.Forms.Label();
             this.label15 = new System.Windows.Forms.Label();
-            this.rbAlliance = new System.Windows.Forms.RadioButton();
-            this.rbHorde = new System.Windows.Forms.RadioButton();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.tabControl1.SuspendLayout();
@@ -968,8 +968,9 @@ namespace MyDummy
             this.tabControl1.Location = new System.Drawing.Point(0, -1);
             this.tabControl1.Name = "tabControl1";
             this.tabControl1.SelectedIndex = 0;
-            this.tabControl1.Size = new System.Drawing.Size(436, 517);
+            this.tabControl1.Size = new System.Drawing.Size(222, 109);
             this.tabControl1.TabIndex = 17;
+            this.tabControl1.SelectedIndexChanged += new System.EventHandler(this.tabControl1_SelectedIndexChanged);
             // 
             // tabPage1
             // 
@@ -978,7 +979,7 @@ namespace MyDummy
             this.tabPage1.Location = new System.Drawing.Point(4, 22);
             this.tabPage1.Name = "tabPage1";
             this.tabPage1.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage1.Size = new System.Drawing.Size(428, 491);
+            this.tabPage1.Size = new System.Drawing.Size(214, 83);
             this.tabPage1.TabIndex = 0;
             this.tabPage1.Text = "Bot";
             this.tabPage1.UseVisualStyleBackColor = true;
@@ -1032,10 +1033,32 @@ namespace MyDummy
             this.tabPage2.Location = new System.Drawing.Point(4, 22);
             this.tabPage2.Name = "tabPage2";
             this.tabPage2.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage2.Size = new System.Drawing.Size(428, 491);
+            this.tabPage2.Size = new System.Drawing.Size(428, 489);
             this.tabPage2.TabIndex = 1;
             this.tabPage2.Text = "Settings";
             this.tabPage2.UseVisualStyleBackColor = true;
+            // 
+            // rbHorde
+            // 
+            this.rbHorde.AutoSize = true;
+            this.rbHorde.Location = new System.Drawing.Point(333, 423);
+            this.rbHorde.Name = "rbHorde";
+            this.rbHorde.Size = new System.Drawing.Size(54, 17);
+            this.rbHorde.TabIndex = 54;
+            this.rbHorde.Text = "Horde";
+            this.rbHorde.UseVisualStyleBackColor = true;
+            // 
+            // rbAlliance
+            // 
+            this.rbAlliance.AutoSize = true;
+            this.rbAlliance.Checked = true;
+            this.rbAlliance.Location = new System.Drawing.Point(333, 397);
+            this.rbAlliance.Name = "rbAlliance";
+            this.rbAlliance.Size = new System.Drawing.Size(62, 17);
+            this.rbAlliance.TabIndex = 53;
+            this.rbAlliance.TabStop = true;
+            this.rbAlliance.Text = "Alliance";
+            this.rbAlliance.UseVisualStyleBackColor = true;
             // 
             // label39
             // 
@@ -1398,35 +1421,13 @@ namespace MyDummy
             this.label15.TabIndex = 17;
             this.label15.Text = "Mouse Coords";
             // 
-            // rbAlliance
-            // 
-            this.rbAlliance.AutoSize = true;
-            this.rbAlliance.Checked = true;
-            this.rbAlliance.Location = new System.Drawing.Point(333, 397);
-            this.rbAlliance.Name = "rbAlliance";
-            this.rbAlliance.Size = new System.Drawing.Size(62, 17);
-            this.rbAlliance.TabIndex = 53;
-            this.rbAlliance.TabStop = true;
-            this.rbAlliance.Text = "Alliance";
-            this.rbAlliance.UseVisualStyleBackColor = true;
-            // 
-            // rbHorde
-            // 
-            this.rbHorde.AutoSize = true;
-            this.rbHorde.Location = new System.Drawing.Point(333, 423);
-            this.rbHorde.Name = "rbHorde";
-            this.rbHorde.Size = new System.Drawing.Size(54, 17);
-            this.rbHorde.TabIndex = 54;
-            this.rbHorde.Text = "Horde";
-            this.rbHorde.UseVisualStyleBackColor = true;
-            // 
-            // Form1
+            // frm1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(434, 515);
+            this.ClientSize = new System.Drawing.Size(220, 107);
             this.Controls.Add(this.tabControl1);
-            this.Name = "Form1";
+            this.Name = "frm1";
             this.Text = "Dummy";
             this.TopMost = true;
             this.Load += new System.EventHandler(this.Form1_Load);
@@ -1446,7 +1447,7 @@ namespace MyDummy
 
         private Button button1;
 
-        public Form1()
+        public frm1()
         {
             InitializeComponent();
         }
@@ -1597,5 +1598,18 @@ namespace MyDummy
         private Label label41;
         private RadioButton rbHorde;
         private RadioButton rbAlliance;
+
+
+        private void tabControl1_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if(((TabControl)sender).SelectedIndex == 0)
+            {
+                frm1.ActiveForm.SetBounds(frm1.ActiveForm.Location.X, frm1.ActiveForm.Location.Y, 235, 145);
+            }
+            else if(((TabControl)sender).SelectedIndex == 1)
+            {
+                frm1.ActiveForm.SetBounds(frm1.ActiveForm.Location.X, frm1.ActiveForm.Location.Y, 450, 552);
+            }
+        }
     }
 }
