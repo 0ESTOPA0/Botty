@@ -357,7 +357,7 @@ namespace MyDummy
             wait(13000);
             if(!rbAlliance.Checked)
             {
-                DoKeyPress(N1, 280);
+                DoKeyPress(N1, 320);
                 wait(1000);
             }
             DoKeyPress(WKEY, 2000);
