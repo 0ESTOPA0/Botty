@@ -1,0 +1,69 @@
+﻿<?xml version='1.0' encoding='utf-8'?>
+<SettingsFile xmlns="http://schemas.microsoft.com/VisualStudio/2004/01/settings" CurrentProfile="(Default)" GeneratedClassNamespace="MyDummy" GeneratedClassName="Settings1">
+  <Profiles />
+  <Settings>
+    <Setting Name="txtCoordsXX" Type="System.String" Scope="User">
+      <Value Profile="(Default)">1557</Value>
+    </Setting>
+    <Setting Name="txtCoordsXY" Type="System.String" Scope="User">
+      <Value Profile="(Default)">517</Value>
+    </Setting>
+    <Setting Name="txtCoordsYX" Type="System.String" Scope="User">
+      <Value Profile="(Default)">1607</Value>
+    </Setting>
+    <Setting Name="txtCoordsYY" Type="System.String" Scope="User">
+      <Value Profile="(Default)">517</Value>
+    </Setting>
+    <Setting Name="txtHealthX" Type="System.String" Scope="User">
+      <Value Profile="(Default)">1616</Value>
+    </Setting>
+    <Setting Name="txtHealthY" Type="System.String" Scope="User">
+      <Value Profile="(Default)">288</Value>
+    </Setting>
+    <Setting Name="ProcessName" Type="System.String" Scope="User">
+      <Value Profile="(Default)">WowClassic</Value>
+    </Setting>
+    <Setting Name="txtXBattlemaster" Type="System.String" Scope="User">
+      <Value Profile="(Default)">123</Value>
+    </Setting>
+    <Setting Name="txtYBattlemaster" Type="System.String" Scope="User">
+      <Value Profile="(Default)">123</Value>
+    </Setting>
+    <Setting Name="txtXJoin" Type="System.String" Scope="User">
+      <Value Profile="(Default)">123</Value>
+    </Setting>
+    <Setting Name="txtYJoin" Type="System.String" Scope="User">
+      <Value Profile="(Default)">123</Value>
+    </Setting>
+    <Setting Name="txtXOpenCloseWA" Type="System.String" Scope="User">
+      <Value Profile="(Default)">123</Value>
+    </Setting>
+    <Setting Name="txtYOpenCloseWA" Type="System.String" Scope="User">
+      <Value Profile="(Default)">123</Value>
+    </Setting>
+    <Setting Name="txtXIsAlive" Type="System.String" Scope="User">
+      <Value Profile="(Default)">123</Value>
+    </Setting>
+    <Setting Name="txtYIsAlive" Type="System.String" Scope="User">
+      <Value Profile="(Default)">123</Value>
+    </Setting>
+    <Setting Name="txtXLeave" Type="System.String" Scope="User">
+      <Value Profile="(Default)">123</Value>
+    </Setting>
+    <Setting Name="txtYLeave" Type="System.String" Scope="User">
+      <Value Profile="(Default)">123</Value>
+    </Setting>
+    <Setting Name="txtXLeaveBG" Type="System.String" Scope="User">
+      <Value Profile="(Default)">123</Value>
+    </Setting>
+    <Setting Name="txtYLeaveBG" Type="System.String" Scope="User">
+      <Value Profile="(Default)">123</Value>
+    </Setting>
+    <Setting Name="txtXInsignia" Type="System.String" Scope="User">
+      <Value Profile="(Default)">123</Value>
+    </Setting>
+    <Setting Name="txtYInsignia" Type="System.String" Scope="User">
+      <Value Profile="(Default)">123</Value>
+    </Setting>
+  </Settings>
+</SettingsFile>
