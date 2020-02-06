@@ -274,5 +274,17 @@ namespace MyDummy {
                 this["txtYInsignia"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool rbAlliance {
+            get {
+                return ((bool)(this["rbAlliance"]));
+            }
+            set {
+                this["rbAlliance"] = value;
+            }
+        }
     }
 }

@@ -355,6 +355,11 @@ namespace MyDummy
         {
             //TODO
             wait(13000);
+            if(!rbAlliance.Checked)
+            {
+                DoKeyPress(N1, 280);
+                wait(1000);
+            }
             DoKeyPress(WKEY, 2000);
             wait(1000);
             DoKeyPress(N3, 280);
@@ -375,7 +380,14 @@ namespace MyDummy
             wait(9000);
 
             wait(5000);
-            DoKeyPress(N3, 120);
+            if (!rbAlliance.Checked)
+            {
+                DoKeyPress(N3, 120);
+            }
+            else
+            {
+                DoKeyPress(N3, 620);
+            }
             wait(500);
             DoKeyPress(WKEY, 15000);
 
@@ -623,6 +635,8 @@ namespace MyDummy
             this.label17 = new System.Windows.Forms.Label();
             this.label16 = new System.Windows.Forms.Label();
             this.label15 = new System.Windows.Forms.Label();
+            this.rbAlliance = new System.Windows.Forms.RadioButton();
+            this.rbHorde = new System.Windows.Forms.RadioButton();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.tabControl1.SuspendLayout();
@@ -971,6 +985,8 @@ namespace MyDummy
             // 
             // tabPage2
             // 
+            this.tabPage2.Controls.Add(this.rbHorde);
+            this.tabPage2.Controls.Add(this.rbAlliance);
             this.tabPage2.Controls.Add(this.label39);
             this.tabPage2.Controls.Add(this.txtXInsignia);
             this.tabPage2.Controls.Add(this.txtYInsignia);
@@ -1382,6 +1398,28 @@ namespace MyDummy
             this.label15.TabIndex = 17;
             this.label15.Text = "Mouse Coords";
             // 
+            // rbAlliance
+            // 
+            this.rbAlliance.AutoSize = true;
+            this.rbAlliance.Checked = true;
+            this.rbAlliance.Location = new System.Drawing.Point(333, 397);
+            this.rbAlliance.Name = "rbAlliance";
+            this.rbAlliance.Size = new System.Drawing.Size(62, 17);
+            this.rbAlliance.TabIndex = 53;
+            this.rbAlliance.TabStop = true;
+            this.rbAlliance.Text = "Alliance";
+            this.rbAlliance.UseVisualStyleBackColor = true;
+            // 
+            // rbHorde
+            // 
+            this.rbHorde.AutoSize = true;
+            this.rbHorde.Location = new System.Drawing.Point(333, 423);
+            this.rbHorde.Name = "rbHorde";
+            this.rbHorde.Size = new System.Drawing.Size(54, 17);
+            this.rbHorde.TabIndex = 54;
+            this.rbHorde.Text = "Horde";
+            this.rbHorde.UseVisualStyleBackColor = true;
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -1473,7 +1511,9 @@ namespace MyDummy
             txtXInsignia.Text = Settings1.Default.txtXInsignia;
             txtYInsignia.Text = Settings1.Default.txtYInsignia;
 
-            
+
+            rbAlliance.Checked = Settings1.Default.rbAlliance;
+            rbHorde.Checked = !Settings1.Default.rbAlliance;
 
 
 
@@ -1506,7 +1546,7 @@ namespace MyDummy
             Settings1.Default.txtXInsignia = txtXInsignia.Text;
             Settings1.Default.txtYInsignia = txtYInsignia.Text;
 
-            
+            Settings1.Default.rbAlliance = rbAlliance.Checked;
 
             Settings1.Default.Save();
         }
@@ -1555,5 +1595,7 @@ namespace MyDummy
         private TextBox txtYInsignia;
         private Label label40;
         private Label label41;
+        private RadioButton rbHorde;
+        private RadioButton rbAlliance;
     }
 }
