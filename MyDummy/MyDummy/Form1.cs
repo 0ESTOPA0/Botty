@@ -362,8 +362,17 @@ namespace MyDummy
             }
             DoKeyPress(WKEY, 2000);
             wait(1000);
-            DoKeyPress(N3, 280);
-            wait(1000);
+            if (rbAlliance.Checked)
+            {
+                DoKeyPress(N3, 280);
+                wait(1000);
+            }
+            else
+            {
+                DoKeyPress(N3, 200);
+                wait(1000);
+            }
+           
             DoKeyPress(WKEY, 10000);
             wait(90000);
             DoKeyPress(WKEY, 15000);
