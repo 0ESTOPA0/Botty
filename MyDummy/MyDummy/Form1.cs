@@ -414,14 +414,13 @@ namespace MyDummy
 
         private void WalkJumping(int totalMilliseconds)
         {
-            int partialMilliseconds = totalMilliseconds / 4;
+            int partialMilliseconds = totalMilliseconds / 3;
 
             int randomMin, randomMax;
 
             randomMin = partialMilliseconds - (partialMilliseconds / 10);
             randomMax = partialMilliseconds + (partialMilliseconds / 10);
 
-            DoKeyPress(SPACEBAR, 10);
             DoKeyPress(WKEY, rnd1.Next(randomMin, randomMax));
             DoKeyPress(SPACEBAR, 10);
             DoKeyPress(WKEY, rnd1.Next(randomMin, randomMax));
