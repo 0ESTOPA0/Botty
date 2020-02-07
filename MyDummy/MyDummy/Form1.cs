@@ -389,7 +389,7 @@ namespace MyDummy
             wait(9000);
 
             wait(5000);
-            if (!rbAlliance.Checked)
+            if (rbAlliance.Checked)
             {
                 DoKeyPress(N3, 120);
             }
