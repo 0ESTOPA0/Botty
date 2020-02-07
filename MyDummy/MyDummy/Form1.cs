@@ -414,11 +414,10 @@ namespace MyDummy
 
         private void WalkJumping(int totalMilliseconds)
         {
-            var partialMilliseconds = totalMilliseconds / 4;
+            int partialMilliseconds = totalMilliseconds / 4;
 
             int randomMin, randomMax;
 
-            System.Diagnostics.Stopwatch sw = System.Diagnostics.Stopwatch.StartNew();
             randomMin = partialMilliseconds - (partialMilliseconds / 10);
             randomMax = partialMilliseconds + (partialMilliseconds / 10);
 
@@ -438,10 +437,10 @@ namespace MyDummy
             wait(1000);
             IsInBG = CheckIsInBG();
             wait(1000);
-            if (!IsInBG)
-                TryToJoin();
-            else
+            if (IsInBG)
                 botState = BotState.JustEnter;
+            else
+                TryToJoin();
 
         }
 
@@ -560,13 +559,6 @@ namespace MyDummy
             control.BackColor = mouseColor;
             return mouseColor;
         }
-
-
-
-
-
-
-
 
         /// <summary>
         /// Variable del diseñador necesaria.
