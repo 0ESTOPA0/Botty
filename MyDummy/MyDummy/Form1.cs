@@ -399,7 +399,7 @@ namespace MyDummy
             }
             else
             {
-                DoKeyPress(N3, 820);
+                DoKeyPress(N3, 720);
             }
             wait(500);
             DoKeyPress(WKEY, 15000);
