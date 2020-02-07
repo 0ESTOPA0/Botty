@@ -374,9 +374,9 @@ namespace MyDummy
             }
            
             DoKeyPress(WKEY, 4000);
-            DoKeyPress(SPACEBAR, 20);
+            DoKeyPress(SPACEBAR, 10);
             DoKeyPress(WKEY, 3000);
-            DoKeyPress(SPACEBAR, 20);
+            DoKeyPress(SPACEBAR, 10);
             DoKeyPress(WKEY, 3000);
             wait(90000);
             DoKeyPress(WKEY, 15000);
