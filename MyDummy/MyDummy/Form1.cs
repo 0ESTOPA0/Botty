@@ -305,11 +305,11 @@ namespace MyDummy
             if (CheckIsAlive())
             {
                 //TODO
-                var rnd = rnd1.Next(1, 5);
+                var rnd = rnd1.Next(1, 4);
                 switch (rnd)
                 {
                     case 1:
-                        DoKeyPress(SPACEBAR);
+                        DoKeyPress(EKEY);
                         break;
                     case 2:
                         DoKeyPress(WKEY);
@@ -320,9 +320,9 @@ namespace MyDummy
                     case 4:
                         DoKeyPress(QKEY);
                         break;
-                    case 5:
-                        DoKeyPress(EKEY);
-                        break;
+                    //case 5:
+                    //    DoKeyPress(SPACEBAR);
+                    //    break;
                     default:
                         DoKeyPress(SPACEBAR);
                         break;
@@ -374,9 +374,9 @@ namespace MyDummy
             }
            
             DoKeyPress(WKEY, 4000);
-            DoKeyPress(SPACEBAR, 10);
+            DoKeyPress(SPACEBAR, 1);
             DoKeyPress(WKEY, 3000);
-            DoKeyPress(SPACEBAR, 10);
+            DoKeyPress(SPACEBAR, 1);
             DoKeyPress(WKEY, 3000);
             wait(90000);
             DoKeyPress(WKEY, 15000);
@@ -399,7 +399,7 @@ namespace MyDummy
             }
             else
             {
-                DoKeyPress(N3, 720);
+                DoKeyPress(N3, 750);
             }
             wait(500);
             DoKeyPress(WKEY, 15000);
