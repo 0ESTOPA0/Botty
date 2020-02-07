@@ -355,7 +355,7 @@ namespace MyDummy
         {
             //TODO
             wait(13000);
-            if(!rbAlliance.Checked)
+            if (!rbAlliance.Checked)
             {
                 DoKeyPress(N1, 320);
                 wait(1000);
@@ -372,47 +372,24 @@ namespace MyDummy
                 DoKeyPress(N3, 220);
                 wait(1000);
             }
-           
-            DoKeyPress(WKEY, 6000);
-            DoKeyPress(SPACEBAR, 10);
-            DoKeyPress(WKEY, 2000);
-            DoKeyPress(SPACEBAR, 10);
-            DoKeyPress(WKEY, 3000);
-            DoKeyPress(SPACEBAR, 10);
-            DoKeyPress(WKEY, 4000);
+
+            WalkJumping(20000);
 
             wait(90000);
 
-            DoKeyPress(WKEY, 5000);
-            DoKeyPress(SPACEBAR, 10);
-            DoKeyPress(WKEY, 4000);
-            DoKeyPress(SPACEBAR, 10);
-            DoKeyPress(WKEY, 6000);
-            DoKeyPress(SPACEBAR, 10);
-            DoKeyPress(WKEY, 5000);
+            WalkJumping(20000);
 
             wait(1000);
             DoKeyPress(N3, 100);
             wait(500);
-            DoKeyPress(WKEY, 5000);
-            DoKeyPress(SPACEBAR, 10);
-            DoKeyPress(WKEY, 4000);
-            DoKeyPress(SPACEBAR, 10);
-            DoKeyPress(WKEY, 6000);
-            DoKeyPress(SPACEBAR, 10);
-            DoKeyPress(WKEY, 5000);
+
+            WalkJumping(20000);
 
             wait(1000);
             DoKeyPress(N1, 200);
             wait(500);
 
-            DoKeyPress(WKEY, 5000);
-            DoKeyPress(SPACEBAR, 10);
-            DoKeyPress(WKEY, 4000);
-            DoKeyPress(SPACEBAR, 10);
-            DoKeyPress(WKEY, 6000);
-            DoKeyPress(SPACEBAR, 10);
-            DoKeyPress(WKEY, 5000);
+            WalkJumping(20000);
 
             wait(500);
             DoClick(Int32.Parse(txtXInsignia.Text), Int32.Parse(txtYInsignia.Text));
@@ -428,10 +405,29 @@ namespace MyDummy
                 DoKeyPress(N3, 750);
             }
             wait(500);
-            DoKeyPress(WKEY, 15000);
+
+            WalkJumping(20000);
 
             botState = BotState.Alive;
 
+        }
+
+        private void WalkJumping(int totalMilliseconds)
+        {
+            var partialMilliseconds = totalMilliseconds / 4;
+
+            int randomMin, randomMax;
+
+            System.Diagnostics.Stopwatch sw = System.Diagnostics.Stopwatch.StartNew();
+            randomMin = partialMilliseconds - (partialMilliseconds / 10);
+            randomMax = partialMilliseconds + (partialMilliseconds / 10);
+
+            DoKeyPress(SPACEBAR, 10);
+            DoKeyPress(WKEY, rnd1.Next(randomMin, randomMax));
+            DoKeyPress(SPACEBAR, 10);
+            DoKeyPress(WKEY, rnd1.Next(randomMin, randomMax));
+            DoKeyPress(SPACEBAR, 10);
+            DoKeyPress(WKEY, rnd1.Next(randomMin, randomMax));
         }
 
         bool IsInBG;
@@ -446,7 +442,6 @@ namespace MyDummy
                 TryToJoin();
             else
                 botState = BotState.JustEnter;
-
 
         }
 
