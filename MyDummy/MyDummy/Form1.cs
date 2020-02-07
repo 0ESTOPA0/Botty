@@ -373,21 +373,47 @@ namespace MyDummy
                 wait(1000);
             }
            
+            DoKeyPress(WKEY, 6000);
+            DoKeyPress(SPACEBAR, 10);
+            DoKeyPress(WKEY, 2000);
+            DoKeyPress(SPACEBAR, 10);
+            DoKeyPress(WKEY, 3000);
+            DoKeyPress(SPACEBAR, 10);
             DoKeyPress(WKEY, 4000);
-            DoKeyPress(SPACEBAR, 1);
-            DoKeyPress(WKEY, 3000);
-            DoKeyPress(SPACEBAR, 1);
-            DoKeyPress(WKEY, 3000);
+
             wait(90000);
-            DoKeyPress(WKEY, 15000);
+
+            DoKeyPress(WKEY, 5000);
+            DoKeyPress(SPACEBAR, 10);
+            DoKeyPress(WKEY, 4000);
+            DoKeyPress(SPACEBAR, 10);
+            DoKeyPress(WKEY, 6000);
+            DoKeyPress(SPACEBAR, 10);
+            DoKeyPress(WKEY, 5000);
+
             wait(1000);
             DoKeyPress(N3, 100);
             wait(500);
-            DoKeyPress(WKEY, 15000);
+            DoKeyPress(WKEY, 5000);
+            DoKeyPress(SPACEBAR, 10);
+            DoKeyPress(WKEY, 4000);
+            DoKeyPress(SPACEBAR, 10);
+            DoKeyPress(WKEY, 6000);
+            DoKeyPress(SPACEBAR, 10);
+            DoKeyPress(WKEY, 5000);
+
             wait(1000);
             DoKeyPress(N1, 200);
             wait(500);
-            DoKeyPress(WKEY, 15000);
+
+            DoKeyPress(WKEY, 5000);
+            DoKeyPress(SPACEBAR, 10);
+            DoKeyPress(WKEY, 4000);
+            DoKeyPress(SPACEBAR, 10);
+            DoKeyPress(WKEY, 6000);
+            DoKeyPress(SPACEBAR, 10);
+            DoKeyPress(WKEY, 5000);
+
             wait(500);
             DoClick(Int32.Parse(txtXInsignia.Text), Int32.Parse(txtYInsignia.Text));
             wait(9000);
