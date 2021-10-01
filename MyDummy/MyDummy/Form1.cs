@@ -25,6 +25,11 @@ namespace MyDummy
 
         public enum BotState
         {
+            JustStarted,
+            Fishing,
+            WaitingToFish,
+            WaitingForFish,
+            Repairing,
             WaitingToEnter,
             JustEnter,
             Alive,
@@ -39,6 +44,9 @@ namespace MyDummy
         static extern void keybd_event(byte bVk, byte bScan, int dwFlags, int dwExtraInfo);
         [DllImport("user32.dll", CharSet = CharSet.Auto, CallingConvention = CallingConvention.StdCall)]
         static extern void mouse_event(int dwFlags, int dx, int dy, int cButtons, int dwExtraInfo);
+
+        // https://docs.microsoft.com/en-us/windows/win32/inputdev/virtual-key-codes
+
         private const int MOUSEEVENTF_LEFTDOWN = 0x02;
         private const int MOUSEEVENTF_LEFTUP = 0x04;
         private const int MOUSEEVENTF_RIGHTDOWN = 0x08;
@@ -76,6 +84,12 @@ namespace MyDummy
         public const int N8 = 0x68; // tecla 8 
         public const int N9 = 0x69; // tecla 9 
         public const int N0 = 0x60; // tecla 0 
+        public const int VK_TAB = 0x09; // tab 
+        public const int VK_F3 = 0x72; // f1 
+        public const int VK_LBUTTON = 0x01; // f1 
+
+
+
 
 
         /// <summary>
@@ -228,45 +242,41 @@ namespace MyDummy
 
         public void mainBotMethod()
         {
+            botState = BotState.JustStarted;
+            SetDebugText("JustStarted");
+
+            wait(200);
+            focawow();
+            wait(200);
+
             while (botIsRunning)
             {
                 // All your stuff in here
 
-                wait(2000);
-                focawow();
-                wait(2000);
 
-                //if(botState == BotState.Dead || botState == BotState.DeadWaitingRelease)
-                //{
-                if (CheckIsAlive())
-                {
-                    if (!CheckIsInBG())
-                    {
-                        botState = BotState.WaitingToEnter;
-                    }
-                }
-                //}
 
                 switch (botState)
                 {
-                    case BotState.WaitingToEnter:
-                        WaitingToEnter();
+                    case BotState.JustStarted:
+                        JustStarted();
                         break;
-                    case BotState.JustEnter:
-                        JustEnter();
+                    case BotState.WaitingToFish:
+                        WaitingToFish();
                         break;
-                    case BotState.Alive:
-                        Alive();
+                    case BotState.WaitingForFish:
+                        WaitingForFish();
                         break;
-                    case BotState.Dead:
-                        Dead();
+                    case BotState.Fishing:
+                        Fishing();
                         break;
-                    case BotState.DeadWaitingRelease:
-                        DeadWaitingRelease();
+                    case BotState.Repairing:
+                        Repairing();
                         break;
                     default:
                         break;
                 }
+
+
 
                 //var xColor = GetColorAt(1557, 517);
                 //var RGBxColor = xColor.ToArgb();
@@ -278,6 +288,133 @@ namespace MyDummy
                 }
             }
         }
+
+        private void Repairing()
+        {
+            throw new NotImplementedException();
+        }
+
+        private void Fishing()
+        {
+            int maxGreen = GetMaxGreen();
+            //string colorPicked = string.Format("{0} - {1} - {2}", mouseColor.R.ToString(), mouseColor.G.ToString(), mouseColor.R.ToString());
+            SetDebugText("Fishing True " + maxGreen);
+
+            //focawow(); // this is the focust window method above
+            if (maxGreen > 150)
+            {
+                keybd_event(N9, 0, KEYEVENTF_EXTENDEDKEY, 0);
+            }
+            else if (maxGreen < 100)
+                keybd_event(N9, 0, KEYEVENTF_KEYUP, 0); // solta a tecla
+            //wait(100); // this is wait method above 
+
+            if (CheckFishReady())
+            {
+                botState = BotState.JustStarted;
+                SetDebugText("JustStarted");
+                keybd_event(N9, 0, KEYEVENTF_KEYUP, 0); // solta a tecla
+                wait(4000);
+            }
+
+            if ((DateTime.Now - fishingTimer).TotalSeconds > 180)
+            {
+                SetDebugText("TimeOUT");
+                wait(10000);
+                // DoKeyPress(N8, 200);
+            }
+
+        }
+
+        private int GetMaxGreen()
+        {
+            int xCoor = Int32.Parse(txtXBattlemaster.Text);
+            Color color01 = GetColorAt(xCoor, Int32.Parse(txtYBattlemaster.Text));
+            Color color02 = GetColorAt(xCoor - 4 , Int32.Parse(txtYBattlemaster.Text));
+            Color color03 = GetColorAt(xCoor - 8 , Int32.Parse(txtYBattlemaster.Text));
+            Color color04 = GetColorAt(xCoor - 12, Int32.Parse(txtYBattlemaster.Text));
+            //Color color05 = GetColorAt(xCoor - 8, Int32.Parse(txtYBattlemaster.Text));
+            //Color color06 = GetColorAt(xCoor - 10, Int32.Parse(txtYBattlemaster.Text));
+            //Color color07 = GetColorAt(xCoor - 12, Int32.Parse(txtYBattlemaster.Text));
+            return Math.Max(Math.Max(Math.Max(color01.G, color02.G), color03.G), color04.G);
+        }
+
+        DateTime fishingTimer = DateTime.Now;
+        private void WaitingForFish()
+        {
+            Color mouseColor = GetColorAt(Int32.Parse(txtXBattlemaster.Text), Int32.Parse(txtYBattlemaster.Text));
+            string colorPicked = string.Format("{0} - {1} - {2}", mouseColor.R.ToString(), mouseColor.G.ToString(), mouseColor.R.ToString());
+            if (CheckFishPickUp())
+            {
+                wait(1500);
+                DoKeyPress(N9, 100);
+                botState = BotState.Fishing;
+                fishingTimer = DateTime.Now;
+                SetDebugText("Fishing True " + colorPicked);
+            }
+            else
+            {
+                SetDebugText("WaitingForFish False " + colorPicked);
+            }
+        }
+
+        private void SetDebugText(string textToSet)
+        {
+            Invoke(new Action(() =>
+            {
+                lblDebug.Text = textToSet;
+            }));
+        }
+
+        private bool CheckFishPickUp()
+        {
+            Color mouseColor = GetColorAt(Int32.Parse(txtXBattlemaster.Text), Int32.Parse(txtYBattlemaster.Text));
+            return ((mouseColor.R < 200));
+        }
+
+        private bool CheckFishReady()
+        {
+            Color mouseColor = GetColorAt(Int32.Parse(txtXJoin.Text), Int32.Parse(txtYJoin.Text));
+            return ((mouseColor.R > 200));
+        }
+
+
+        private void WaitingToFish()
+        {
+            wait(500);
+            DoKeyPress(N9, 2050);
+            wait(2000);
+            botState = BotState.WaitingForFish;
+            SetDebugText("WaitingForFish");
+
+        }
+
+        private void JustStarted()
+        {
+            fishingTimer = DateTime.Now;
+            //saca la caña de pescar
+            if (!CheckFishReady())
+            {
+                wait(2000);
+                DoKeyPress(VK_F3, 300);
+            }
+
+            wait(2000);
+            botState = BotState.WaitingToFish;
+            SetDebugText("WaitingToFish");
+
+        }
+
+
+
+
+
+
+
+
+
+
+
 
         private void DeadWaitingRelease()
         {
@@ -451,7 +588,7 @@ namespace MyDummy
 
         private void TryToJoin()
         {
-            
+
             wait(1000);
             DoClick(Int32.Parse(txtXBattlemaster.Text), Int32.Parse(txtYBattlemaster.Text));
             wait(1000);
@@ -539,7 +676,7 @@ namespace MyDummy
                 }
                 catch (Exception ex)
                 {
-                   // MessageBox.Show(ex.Message);
+                    // MessageBox.Show(ex.Message);
                     Environment.Exit(1);
                 }
             }
@@ -662,6 +799,7 @@ namespace MyDummy
             this.label17 = new System.Windows.Forms.Label();
             this.label16 = new System.Windows.Forms.Label();
             this.label15 = new System.Windows.Forms.Label();
+            this.lblDebug = new System.Windows.Forms.Label();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.tabControl1.SuspendLayout();
@@ -985,26 +1123,27 @@ namespace MyDummy
             // 
             // tabControl1
             // 
-            this.tabControl1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
+            this.tabControl1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+            | System.Windows.Forms.AnchorStyles.Left)
             | System.Windows.Forms.AnchorStyles.Right)));
             this.tabControl1.Controls.Add(this.tabPage1);
             this.tabControl1.Controls.Add(this.tabPage2);
             this.tabControl1.Location = new System.Drawing.Point(0, -1);
             this.tabControl1.Name = "tabControl1";
             this.tabControl1.SelectedIndex = 0;
-            this.tabControl1.Size = new System.Drawing.Size(222, 109);
+            this.tabControl1.Size = new System.Drawing.Size(589, 529);
             this.tabControl1.TabIndex = 17;
             this.tabControl1.SelectedIndexChanged += new System.EventHandler(this.tabControl1_SelectedIndexChanged);
             // 
             // tabPage1
             // 
+            this.tabPage1.Controls.Add(this.lblDebug);
             this.tabPage1.Controls.Add(this.button1);
             this.tabPage1.Controls.Add(this.button2);
             this.tabPage1.Location = new System.Drawing.Point(4, 22);
             this.tabPage1.Name = "tabPage1";
             this.tabPage1.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage1.Size = new System.Drawing.Size(214, 83);
+            this.tabPage1.Size = new System.Drawing.Size(581, 503);
             this.tabPage1.TabIndex = 0;
             this.tabPage1.Text = "Bot";
             this.tabPage1.UseVisualStyleBackColor = true;
@@ -1058,7 +1197,7 @@ namespace MyDummy
             this.tabPage2.Location = new System.Drawing.Point(4, 22);
             this.tabPage2.Name = "tabPage2";
             this.tabPage2.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage2.Size = new System.Drawing.Size(428, 489);
+            this.tabPage2.Size = new System.Drawing.Size(581, 503);
             this.tabPage2.TabIndex = 1;
             this.tabPage2.Text = "Settings";
             this.tabPage2.UseVisualStyleBackColor = true;
@@ -1271,7 +1410,7 @@ namespace MyDummy
             this.txtXJoin.Name = "txtXJoin";
             this.txtXJoin.Size = new System.Drawing.Size(44, 20);
             this.txtXJoin.TabIndex = 33;
-            this.txtXJoin.Text = "1557";
+            this.txtXJoin.Text = "1109";
             this.txtXJoin.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
             // 
             // label25
@@ -1289,7 +1428,7 @@ namespace MyDummy
             this.txtYJoin.Name = "txtYJoin";
             this.txtYJoin.Size = new System.Drawing.Size(44, 20);
             this.txtYJoin.TabIndex = 34;
-            this.txtYJoin.Text = "517";
+            this.txtYJoin.Text = "765";
             this.txtYJoin.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
             // 
             // label26
@@ -1326,7 +1465,7 @@ namespace MyDummy
             this.label8.Name = "label8";
             this.label8.Size = new System.Drawing.Size(99, 13);
             this.label8.TabIndex = 27;
-            this.label8.Text = "Battlemaster Target";
+            this.label8.Text = "Fishing Pixel Target";
             // 
             // txtXBattlemaster
             // 
@@ -1334,7 +1473,7 @@ namespace MyDummy
             this.txtXBattlemaster.Name = "txtXBattlemaster";
             this.txtXBattlemaster.Size = new System.Drawing.Size(44, 20);
             this.txtXBattlemaster.TabIndex = 28;
-            this.txtXBattlemaster.Text = "1557";
+            this.txtXBattlemaster.Text = "914";
             this.txtXBattlemaster.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
             // 
             // txtYBattlemaster
@@ -1343,7 +1482,7 @@ namespace MyDummy
             this.txtYBattlemaster.Name = "txtYBattlemaster";
             this.txtYBattlemaster.Size = new System.Drawing.Size(44, 20);
             this.txtYBattlemaster.TabIndex = 29;
-            this.txtYBattlemaster.Text = "517";
+            this.txtYBattlemaster.Text = "102";
             this.txtYBattlemaster.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
             // 
             // label10
@@ -1370,16 +1509,16 @@ namespace MyDummy
             this.txtWowProcess.Name = "txtWowProcess";
             this.txtWowProcess.Size = new System.Drawing.Size(139, 20);
             this.txtWowProcess.TabIndex = 26;
-            this.txtWowProcess.Text = "WowClassic";
+            this.txtWowProcess.Text = "NewWorld";
             // 
             // label7
             // 
             this.label7.AutoSize = true;
             this.label7.Location = new System.Drawing.Point(8, 23);
             this.label7.Name = "label7";
-            this.label7.Size = new System.Drawing.Size(107, 13);
+            this.label7.Size = new System.Drawing.Size(98, 13);
             this.label7.TabIndex = 25;
-            this.label7.Text = "WoW Process Name";
+            this.label7.Text = "NW Process Name";
             // 
             // grpMouseColor
             // 
@@ -1446,11 +1585,20 @@ namespace MyDummy
             this.label15.TabIndex = 17;
             this.label15.Text = "Mouse Coords";
             // 
+            // lblDebug
+            // 
+            this.lblDebug.AutoSize = true;
+            this.lblDebug.Location = new System.Drawing.Point(17, 7);
+            this.lblDebug.Name = "lblDebug";
+            this.lblDebug.Size = new System.Drawing.Size(39, 13);
+            this.lblDebug.TabIndex = 18;
+            this.lblDebug.Text = "Debug";
+            // 
             // frm1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(220, 107);
+            this.ClientSize = new System.Drawing.Size(587, 527);
             this.Controls.Add(this.tabControl1);
             this.Name = "frm1";
             this.Text = "Dummy";
@@ -1462,6 +1610,7 @@ namespace MyDummy
             this.groupBox2.PerformLayout();
             this.tabControl1.ResumeLayout(false);
             this.tabPage1.ResumeLayout(false);
+            this.tabPage1.PerformLayout();
             this.tabPage2.ResumeLayout(false);
             this.tabPage2.PerformLayout();
             this.ResumeLayout(false);
@@ -1627,14 +1776,16 @@ namespace MyDummy
 
         private void tabControl1_SelectedIndexChanged(object sender, EventArgs e)
         {
-            if(((TabControl)sender).SelectedIndex == 0)
+            if (((TabControl)sender).SelectedIndex == 0)
             {
                 frm1.ActiveForm.SetBounds(frm1.ActiveForm.Location.X, frm1.ActiveForm.Location.Y, 235, 145);
             }
-            else if(((TabControl)sender).SelectedIndex == 1)
+            else if (((TabControl)sender).SelectedIndex == 1)
             {
                 frm1.ActiveForm.SetBounds(frm1.ActiveForm.Location.X, frm1.ActiveForm.Location.Y, 450, 552);
             }
         }
+
+        private Label lblDebug;
     }
 }
