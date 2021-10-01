@@ -291,7 +291,19 @@ namespace MyDummy
 
         private void Repairing()
         {
-            throw new NotImplementedException();
+            wait(200);
+            DoKeyPress(VK_TAB, 100);
+            wait(1000);
+            DoClick(866, 670);
+            wait(1000);
+            DoClick(958, 708);
+            wait(1000);
+            DoClick(1009, 612);
+            wait(1000);
+            DoKeyPress(VK_TAB, 100);
+            wait(1000);
+            botState = BotState.JustStarted;
+            SetDebugText("JustStarted");
         }
 
         private void Fishing()
@@ -330,8 +342,8 @@ namespace MyDummy
         {
             int xCoor = Int32.Parse(txtXBattlemaster.Text);
             Color color01 = GetColorAt(xCoor, Int32.Parse(txtYBattlemaster.Text));
-            Color color02 = GetColorAt(xCoor - 4 , Int32.Parse(txtYBattlemaster.Text));
-            Color color03 = GetColorAt(xCoor - 8 , Int32.Parse(txtYBattlemaster.Text));
+            Color color02 = GetColorAt(xCoor - 4, Int32.Parse(txtYBattlemaster.Text));
+            Color color03 = GetColorAt(xCoor - 8, Int32.Parse(txtYBattlemaster.Text));
             Color color04 = GetColorAt(xCoor - 12, Int32.Parse(txtYBattlemaster.Text));
             //Color color05 = GetColorAt(xCoor - 8, Int32.Parse(txtYBattlemaster.Text));
             //Color color06 = GetColorAt(xCoor - 10, Int32.Parse(txtYBattlemaster.Text));
@@ -389,19 +401,30 @@ namespace MyDummy
 
         }
 
+        int repairCount = 0;
         private void JustStarted()
         {
-            fishingTimer = DateTime.Now;
-            //saca la caña de pescar
-            if (!CheckFishReady())
+            if (repairCount < 5)
             {
-                wait(2000);
-                DoKeyPress(VK_F3, 300);
-            }
+                repairCount += 1;
+                fishingTimer = DateTime.Now;
+                //saca la caña de pescar
+                if (!CheckFishReady())
+                {
+                    wait(2000);
+                    DoKeyPress(VK_F3, 300);
+                }
 
-            wait(2000);
-            botState = BotState.WaitingToFish;
-            SetDebugText("WaitingToFish");
+                wait(2000);
+                botState = BotState.WaitingToFish;
+                SetDebugText("WaitingToFish");
+            }
+            else
+            {
+                botState = BotState.Repairing;
+                repairCount = 0;
+                SetDebugText("Repairing");
+            }
 
         }
 
