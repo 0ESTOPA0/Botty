@@ -291,7 +291,7 @@ namespace MyDummy
             {
                 // All your stuff in here
 
-                CameraPositioning();
+                
 
                 switch (botState)
                 {
@@ -503,18 +503,10 @@ namespace MyDummy
         int repairCount = 0;
         private void JustStarted()
         {
-            wait(1000);
-            DoKeyPress(VK_TAB, 100);
-            wait(1000);
-            DoKeyPress(VK_TAB, 100);
-            wait(1000);
-
-            MoveMouse(0, 800);
-            wait(2000);
 
             if (repairCount < 20)
             {
-               
+                CameraPositioning();
 
                 repairCount += 1;
                 fishingTimer = DateTime.Now;
