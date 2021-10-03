@@ -51,6 +51,14 @@ namespace MyDummy
         private const int MOUSEEVENTF_LEFTUP = 0x04;
         private const int MOUSEEVENTF_RIGHTDOWN = 0x08;
         private const int MOUSEEVENTF_RIGHTUP = 0x10;
+
+        private const int MOUSEEVENTF_MOVE = 0x0001;
+        private const int MOUSEEVENTF_ABSOLUTE = 0x8000;
+        private const int MOUSEEVENTF_WHEEL = 0x0800;
+
+        
+
+
         public const int KEYEVENTF_EXTENDEDKEY = 0x0001; //Key down flag
         public const int KEYEVENTF_KEYUP = 0x0002; //Key up flag
         public const int QKEY = 0x51; // tecla Q 
@@ -198,6 +206,38 @@ namespace MyDummy
             DoMouseClick(botao);
         }
 
+        // simulates movement of the mouse.  parameters specify changes
+        // in relative position.  positive values indicate movement
+        // right or down
+        void MoveMouse(int xDelta, int yDelta)
+        {
+            mouse_event(MOUSEEVENTF_MOVE, xDelta, yDelta, 0, 0);
+        }
+
+
+        // simulates movement of the mouse.  parameters specify an
+        // absolute location, with the top left corner being the
+        // origin
+        void MoveToMouse(int x, int y)
+        {
+            mouse_event(MOUSEEVENTF_ABSOLUTE | MOUSEEVENTF_MOVE, x, y, 0, 0);
+        }
+
+        void MoveWheelMouse(int ammount = 120)
+        {
+            mouse_event(MOUSEEVENTF_WHEEL, 0, 0, ammount, 0);
+        }
+
+        void MoveWheelDeltaMouse(int deltas)
+        {
+            for (int i = 0; i < deltas; i++)
+            {
+                MoveWheelMouse();
+                wait(200);
+            }
+        }
+        
+
         Color GetColorAt(int x, int y)
         {
             Bitmap bmp =
@@ -242,18 +282,16 @@ namespace MyDummy
 
         public void mainBotMethod()
         {
+            
+
             botState = BotState.JustStarted;
             SetDebugText("JustStarted");
-
-            wait(200);
-            focawow();
-            wait(200);
 
             while (botIsRunning)
             {
                 // All your stuff in here
 
-
+                CameraPositioning();
 
                 switch (botState)
                 {
@@ -289,6 +327,26 @@ namespace MyDummy
             }
         }
 
+        private void CameraPositioning()
+        {
+            wait(200);
+            focawow();
+            wait(200);
+
+            wait(1000);
+            DoKeyPress(VK_TAB, 100);
+            wait(1000);
+            DoKeyPress(VK_TAB, 100);
+            wait(1000);
+
+            MoveMouse(0, 800);
+            wait(1000);
+
+            MoveWheelDeltaMouse(10);
+
+            wait(1000);
+        }
+
         private void Repairing()
         {
             wait(200);
@@ -308,18 +366,25 @@ namespace MyDummy
 
         private void Fishing()
         {
-            int maxGreen = GetMaxGreen();
-            //string colorPicked = string.Format("{0} - {1} - {2}", mouseColor.R.ToString(), mouseColor.G.ToString(), mouseColor.R.ToString());
-            SetDebugText("Fishing True " + maxGreen);
+            //int maxGreen = GetMaxGreen();
+            // int maxRed = GetMaxRed();
+            int maxRed = GetColors().Where((x) => x.R > 150 && x.G < 100).FirstOrDefault().R;
+            SetDebugText("Fishing True " + maxRed);
 
-            //focawow(); // this is the focust window method above
-            if (maxGreen > 150)
+            //if (maxGreen > 150)
+            //{
+            //    keybd_event(N9, 0, KEYEVENTF_EXTENDEDKEY, 0);
+            //}
+            //else if (maxGreen < 100)
+            //    keybd_event(N9, 0, KEYEVENTF_KEYUP, 0); // solta a tecla
+
+            if (maxRed > 150)
             {
-                keybd_event(N9, 0, KEYEVENTF_EXTENDEDKEY, 0);
-            }
-            else if (maxGreen < 100)
                 keybd_event(N9, 0, KEYEVENTF_KEYUP, 0); // solta a tecla
-            //wait(100); // this is wait method above 
+            }
+            else if (maxRed < 100)
+                keybd_event(N9, 0, KEYEVENTF_EXTENDEDKEY, 0);
+
 
             if (CheckFishReady())
             {
@@ -332,7 +397,10 @@ namespace MyDummy
             if ((DateTime.Now - fishingTimer).TotalSeconds > 180)
             {
                 SetDebugText("TimeOUT");
-                wait(10000);
+                fishingTimer = DateTime.Now;
+                wait(20000);
+                botState = BotState.JustStarted;
+                SetDebugText("JustStarted");
                 // DoKeyPress(N8, 200);
             }
 
@@ -342,13 +410,40 @@ namespace MyDummy
         {
             int xCoor = Int32.Parse(txtXBattlemaster.Text);
             Color color01 = GetColorAt(xCoor, Int32.Parse(txtYBattlemaster.Text));
-            Color color02 = GetColorAt(xCoor - 4, Int32.Parse(txtYBattlemaster.Text));
-            Color color03 = GetColorAt(xCoor - 8, Int32.Parse(txtYBattlemaster.Text));
-            Color color04 = GetColorAt(xCoor - 12, Int32.Parse(txtYBattlemaster.Text));
+            Color color02 = GetColorAt(xCoor - 5, Int32.Parse(txtYBattlemaster.Text));
+            Color color03 = GetColorAt(xCoor - 10, Int32.Parse(txtYBattlemaster.Text));
+            Color color04 = GetColorAt(xCoor - 15, Int32.Parse(txtYBattlemaster.Text));
+            Color color05 = GetColorAt(xCoor - 20, Int32.Parse(txtYBattlemaster.Text));
             //Color color05 = GetColorAt(xCoor - 8, Int32.Parse(txtYBattlemaster.Text));
             //Color color06 = GetColorAt(xCoor - 10, Int32.Parse(txtYBattlemaster.Text));
             //Color color07 = GetColorAt(xCoor - 12, Int32.Parse(txtYBattlemaster.Text));
-            return Math.Max(Math.Max(Math.Max(color01.G, color02.G), color03.G), color04.G);
+            return Math.Max(Math.Max(Math.Max(Math.Max(color01.G, color02.G), color03.G), color04.G), color05.G);
+        }
+
+        private int GetMaxRed()
+        {
+            int xCoor = Int32.Parse(txtXBattlemaster.Text);
+            Color color01 = GetColorAt(xCoor, Int32.Parse(txtYBattlemaster.Text));
+            Color color02 = GetColorAt(xCoor - 5, Int32.Parse(txtYBattlemaster.Text));
+            Color color03 = GetColorAt(xCoor - 10, Int32.Parse(txtYBattlemaster.Text));
+            Color color04 = GetColorAt(xCoor - 15, Int32.Parse(txtYBattlemaster.Text));
+            Color color05 = GetColorAt(xCoor - 20, Int32.Parse(txtYBattlemaster.Text));
+            //Color color05 = GetColorAt(xCoor - 8, Int32.Parse(txtYBattlemaster.Text));
+            //Color color06 = GetColorAt(xCoor - 10, Int32.Parse(txtYBattlemaster.Text));
+            //Color color07 = GetColorAt(xCoor - 12, Int32.Parse(txtYBattlemaster.Text));
+            return Math.Max(Math.Max(Math.Max(Math.Max(color01.R, color02.R), color03.R), color04.R), color05.R);
+        }
+
+        private List<Color> GetColors()
+        {
+            List<Color> colorsList = new List<Color>();
+            int xCoor = Int32.Parse(txtXBattlemaster.Text);
+            for (int i = 0; i < 5; i++)
+            {
+                colorsList.Add(GetColorAt(xCoor, Int32.Parse(txtYBattlemaster.Text)));
+                xCoor -= 10;
+            }
+            return colorsList;
         }
 
         DateTime fishingTimer = DateTime.Now;
@@ -356,9 +451,10 @@ namespace MyDummy
         {
             Color mouseColor = GetColorAt(Int32.Parse(txtXBattlemaster.Text), Int32.Parse(txtYBattlemaster.Text));
             string colorPicked = string.Format("{0} - {1} - {2}", mouseColor.R.ToString(), mouseColor.G.ToString(), mouseColor.R.ToString());
-            if (CheckFishPickUp())
-            {
-                wait(1500);
+            //if (CheckFishPickUp())
+            if (GetMaxRed() < 170)
+                {
+                wait(1100);
                 DoKeyPress(N9, 100);
                 botState = BotState.Fishing;
                 fishingTimer = DateTime.Now;
@@ -387,7 +483,9 @@ namespace MyDummy
         private bool CheckFishReady()
         {
             Color mouseColor = GetColorAt(Int32.Parse(txtXJoin.Text), Int32.Parse(txtYJoin.Text));
-            return ((mouseColor.R > 200));
+            Color mouseColor2 = GetColorAt(Int32.Parse(txtXLeave.Text), Int32.Parse(txtYLeave.Text));
+            
+            return ((mouseColor.R > 200) && mouseColor2.R < 100);
         }
 
 
@@ -395,7 +493,8 @@ namespace MyDummy
         {
             wait(500);
             DoKeyPress(N9, 2050);
-            wait(2000);
+            //DoKeyPress(N9, 500);
+            wait(3000);
             botState = BotState.WaitingForFish;
             SetDebugText("WaitingForFish");
 
@@ -404,8 +503,19 @@ namespace MyDummy
         int repairCount = 0;
         private void JustStarted()
         {
-            if (repairCount < 5)
+            wait(1000);
+            DoKeyPress(VK_TAB, 100);
+            wait(1000);
+            DoKeyPress(VK_TAB, 100);
+            wait(1000);
+
+            MoveMouse(0, 800);
+            wait(2000);
+
+            if (repairCount < 20)
             {
+               
+
                 repairCount += 1;
                 fishingTimer = DateTime.Now;
                 //saca la caña de pescar
