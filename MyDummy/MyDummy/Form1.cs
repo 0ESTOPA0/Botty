@@ -56,7 +56,7 @@ namespace MyDummy
         private const int MOUSEEVENTF_ABSOLUTE = 0x8000;
         private const int MOUSEEVENTF_WHEEL = 0x0800;
 
-        
+
 
 
         public const int KEYEVENTF_EXTENDEDKEY = 0x0001; //Key down flag
@@ -236,7 +236,7 @@ namespace MyDummy
                 wait(200);
             }
         }
-        
+
 
         Color GetColorAt(int x, int y)
         {
@@ -282,7 +282,7 @@ namespace MyDummy
 
         public void mainBotMethod()
         {
-            
+
 
             botState = BotState.JustStarted;
             SetDebugText("JustStarted");
@@ -291,7 +291,7 @@ namespace MyDummy
             {
                 // All your stuff in here
 
-                
+
 
                 switch (botState)
                 {
@@ -408,13 +408,12 @@ namespace MyDummy
 
         private int GetMaxGreen()
         {
-            int xCoor = Int32.Parse(txtXBattlemaster.Text);
+            int xCoor = xStartFishing;
             Color color01 = GetColorAt(xCoor, Int32.Parse(txtYBattlemaster.Text));
             Color color02 = GetColorAt(xCoor - 5, Int32.Parse(txtYBattlemaster.Text));
             Color color03 = GetColorAt(xCoor - 10, Int32.Parse(txtYBattlemaster.Text));
             Color color04 = GetColorAt(xCoor - 15, Int32.Parse(txtYBattlemaster.Text));
             Color color05 = GetColorAt(xCoor - 20, Int32.Parse(txtYBattlemaster.Text));
-            //Color color05 = GetColorAt(xCoor - 8, Int32.Parse(txtYBattlemaster.Text));
             //Color color06 = GetColorAt(xCoor - 10, Int32.Parse(txtYBattlemaster.Text));
             //Color color07 = GetColorAt(xCoor - 12, Int32.Parse(txtYBattlemaster.Text));
             return Math.Max(Math.Max(Math.Max(Math.Max(color01.G, color02.G), color03.G), color04.G), color05.G);
@@ -422,23 +421,23 @@ namespace MyDummy
 
         private int GetMaxRed()
         {
-            int xCoor = Int32.Parse(txtXBattlemaster.Text);
+            int xCoor = xStartFishing;
             Color color01 = GetColorAt(xCoor, Int32.Parse(txtYBattlemaster.Text));
-            Color color02 = GetColorAt(xCoor - 5, Int32.Parse(txtYBattlemaster.Text));
-            Color color03 = GetColorAt(xCoor - 10, Int32.Parse(txtYBattlemaster.Text));
-            Color color04 = GetColorAt(xCoor - 15, Int32.Parse(txtYBattlemaster.Text));
-            Color color05 = GetColorAt(xCoor - 20, Int32.Parse(txtYBattlemaster.Text));
-            //Color color05 = GetColorAt(xCoor - 8, Int32.Parse(txtYBattlemaster.Text));
+            Color color02 = GetColorAt(xCoor - 10, Int32.Parse(txtYBattlemaster.Text));
+            Color color03 = GetColorAt(xCoor - 20, Int32.Parse(txtYBattlemaster.Text));
+            Color color04 = GetColorAt(xCoor - 30, Int32.Parse(txtYBattlemaster.Text));
+            Color color05 = GetColorAt(xCoor - 40, Int32.Parse(txtYBattlemaster.Text));
             //Color color06 = GetColorAt(xCoor - 10, Int32.Parse(txtYBattlemaster.Text));
             //Color color07 = GetColorAt(xCoor - 12, Int32.Parse(txtYBattlemaster.Text));
             return Math.Max(Math.Max(Math.Max(Math.Max(color01.R, color02.R), color03.R), color04.R), color05.R);
         }
 
+
         private List<Color> GetColors()
         {
             List<Color> colorsList = new List<Color>();
-            int xCoor = Int32.Parse(txtXBattlemaster.Text);
-            for (int i = 0; i < 5; i++)
+            int xCoor = xStartFishing;
+            for (int i = 0; i < 10; i++)
             {
                 colorsList.Add(GetColorAt(xCoor, Int32.Parse(txtYBattlemaster.Text)));
                 xCoor -= 10;
@@ -446,24 +445,50 @@ namespace MyDummy
             return colorsList;
         }
 
+        int xStartFishing = 0;
+        private bool GetXColorsCoor()
+        {
+            List<Color> colorsList = new List<Color>();
+            int xCoor = Int32.Parse(txtXBattlemaster.Text);
+            for (int i = 0; i < 10; i++)
+            {
+                SetDebugText("xCoor  " + xCoor.ToString());
+                var newcolor = GetColorAt(xCoor, Int32.Parse(txtYBattlemaster.Text));
+                if (newcolor.R > 220 && newcolor.G > 220 && newcolor.B > 220)
+                {
+                    xStartFishing = xCoor;
+                    return true;
+                }
+                xCoor -= 10;
+            }
+            return false;
+        }
+
         DateTime fishingTimer = DateTime.Now;
         private void WaitingForFish()
         {
-            Color mouseColor = GetColorAt(Int32.Parse(txtXBattlemaster.Text), Int32.Parse(txtYBattlemaster.Text));
-            string colorPicked = string.Format("{0} - {1} - {2}", mouseColor.R.ToString(), mouseColor.G.ToString(), mouseColor.R.ToString());
-            //if (CheckFishPickUp())
-            if (GetMaxRed() < 170)
+            if (xStartFishing > 0)
+            {
+                Color mouseColor = GetColorAt(xStartFishing, Int32.Parse(txtYBattlemaster.Text));
+                string colorPicked = string.Format("{0} - {1} - {2}", mouseColor.R.ToString(), mouseColor.G.ToString(), mouseColor.R.ToString());
+                //if (GetMaxRed() < 170)
+                //{
+                if (mouseColor.R < 170)
                 {
-                wait(1100);
-                DoKeyPress(N9, 100);
-                botState = BotState.Fishing;
-                fishingTimer = DateTime.Now;
-                SetDebugText("Fishing True " + colorPicked);
+                    wait(1100);
+                    DoKeyPress(N9, 100);
+                    botState = BotState.Fishing;
+                    fishingTimer = DateTime.Now;
+                    SetDebugText("Fishing True " + colorPicked);
+                }
             }
             else
             {
-                SetDebugText("WaitingForFish False " + colorPicked);
+                GetXColorsCoor();
+                SetDebugText("WaitingForFish False ");
             }
+            //}
+
         }
 
         private void SetDebugText(string textToSet)
@@ -476,7 +501,7 @@ namespace MyDummy
 
         private bool CheckFishPickUp()
         {
-            Color mouseColor = GetColorAt(Int32.Parse(txtXBattlemaster.Text), Int32.Parse(txtYBattlemaster.Text));
+            Color mouseColor = GetColorAt(xStartFishing, Int32.Parse(txtYBattlemaster.Text));
             return ((mouseColor.R < 200));
         }
 
@@ -484,7 +509,7 @@ namespace MyDummy
         {
             Color mouseColor = GetColorAt(Int32.Parse(txtXJoin.Text), Int32.Parse(txtYJoin.Text));
             Color mouseColor2 = GetColorAt(Int32.Parse(txtXLeave.Text), Int32.Parse(txtYLeave.Text));
-            
+
             return ((mouseColor.R > 200) && mouseColor2.R < 100);
         }
 
@@ -492,7 +517,7 @@ namespace MyDummy
         private void WaitingToFish()
         {
             wait(500);
-            DoKeyPress(N9, 2050);
+            DoKeyPress(N9, Int32.Parse(txtXOpenCloseWA.Text));
             //DoKeyPress(N9, 500);
             wait(3000);
             botState = BotState.WaitingForFish;
@@ -503,8 +528,8 @@ namespace MyDummy
         int repairCount = 0;
         private void JustStarted()
         {
-
-            if (repairCount < 20)
+            xStartFishing = 0;
+            if (repairCount < Int32.Parse(txtYOpenCloseWA.Text))
             {
                 CameraPositioning();
 
@@ -881,7 +906,12 @@ namespace MyDummy
             this.label14 = new System.Windows.Forms.Label();
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tabPage1 = new System.Windows.Forms.TabPage();
+            this.lblDebug = new System.Windows.Forms.Label();
             this.tabPage2 = new System.Windows.Forms.TabPage();
+            this.label22 = new System.Windows.Forms.Label();
+            this.label23 = new System.Windows.Forms.Label();
+            this.label20 = new System.Windows.Forms.Label();
+            this.label21 = new System.Windows.Forms.Label();
             this.rbHorde = new System.Windows.Forms.RadioButton();
             this.rbAlliance = new System.Windows.Forms.RadioButton();
             this.label39 = new System.Windows.Forms.Label();
@@ -924,7 +954,6 @@ namespace MyDummy
             this.label17 = new System.Windows.Forms.Label();
             this.label16 = new System.Windows.Forms.Label();
             this.label15 = new System.Windows.Forms.Label();
-            this.lblDebug = new System.Windows.Forms.Label();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.tabControl1.SuspendLayout();
@@ -957,18 +986,18 @@ namespace MyDummy
             this.label1.AutoSize = true;
             this.label1.Location = new System.Drawing.Point(6, 28);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(73, 13);
+            this.label1.Size = new System.Drawing.Size(38, 13);
             this.label1.TabIndex = 2;
-            this.label1.Text = "X WeakAuras";
+            this.label1.Text = "Test A";
             // 
             // label2
             // 
             this.label2.AutoSize = true;
             this.label2.Location = new System.Drawing.Point(93, 28);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(73, 13);
+            this.label2.Size = new System.Drawing.Size(38, 13);
             this.label2.TabIndex = 3;
-            this.label2.Text = "Y WeakAuras";
+            this.label2.Text = "Test B";
             // 
             // txtCoordsXX
             // 
@@ -1058,12 +1087,12 @@ namespace MyDummy
             this.groupBox1.Controls.Add(this.txtCoordsYX);
             this.groupBox1.Controls.Add(this.label3);
             this.groupBox1.Controls.Add(this.label4);
-            this.groupBox1.Location = new System.Drawing.Point(4, 197);
+            this.groupBox1.Location = new System.Drawing.Point(218, 277);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(179, 174);
+            this.groupBox1.Size = new System.Drawing.Size(200, 174);
             this.groupBox1.TabIndex = 12;
             this.groupBox1.TabStop = false;
-            this.groupBox1.Text = "WeakAuras Coords";
+            this.groupBox1.Text = "Testing Panel B";
             // 
             // grpYResult
             // 
@@ -1084,7 +1113,7 @@ namespace MyDummy
             // lblYResult
             // 
             this.lblYResult.AutoSize = true;
-            this.lblYResult.Location = new System.Drawing.Point(134, 121);
+            this.lblYResult.Location = new System.Drawing.Point(122, 121);
             this.lblYResult.Name = "lblYResult";
             this.lblYResult.Size = new System.Drawing.Size(14, 13);
             this.lblYResult.TabIndex = 15;
@@ -1093,7 +1122,7 @@ namespace MyDummy
             // lblXResult
             // 
             this.lblXResult.AutoSize = true;
-            this.lblXResult.Location = new System.Drawing.Point(50, 121);
+            this.lblXResult.Location = new System.Drawing.Point(36, 121);
             this.lblXResult.Name = "lblXResult";
             this.lblXResult.Size = new System.Drawing.Size(14, 13);
             this.lblXResult.TabIndex = 14;
@@ -1115,12 +1144,12 @@ namespace MyDummy
             this.groupBox2.Controls.Add(this.txtHealthY);
             this.groupBox2.Controls.Add(this.label13);
             this.groupBox2.Controls.Add(this.label14);
-            this.groupBox2.Location = new System.Drawing.Point(203, 197);
+            this.groupBox2.Location = new System.Drawing.Point(19, 277);
             this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Size = new System.Drawing.Size(179, 174);
+            this.groupBox2.Size = new System.Drawing.Size(187, 174);
             this.groupBox2.TabIndex = 16;
             this.groupBox2.TabStop = false;
-            this.groupBox2.Text = "WeakAuras Bars";
+            this.groupBox2.Text = "Testing Panel A";
             // 
             // grpAliveResult
             // 
@@ -1133,20 +1162,20 @@ namespace MyDummy
             // lblAliveResult
             // 
             this.lblAliveResult.AutoSize = true;
-            this.lblAliveResult.Location = new System.Drawing.Point(141, 121);
+            this.lblAliveResult.Location = new System.Drawing.Point(120, 121);
             this.lblAliveResult.Name = "lblAliveResult";
-            this.lblAliveResult.Size = new System.Drawing.Size(10, 13);
+            this.lblAliveResult.Size = new System.Drawing.Size(17, 13);
             this.lblAliveResult.TabIndex = 33;
-            this.lblAliveResult.Text = " ";
+            this.lblAliveResult.Text = " Y";
             // 
             // label27
             // 
             this.label27.AutoSize = true;
             this.label27.Location = new System.Drawing.Point(98, 28);
             this.label27.Name = "label27";
-            this.label27.Size = new System.Drawing.Size(41, 13);
+            this.label27.Size = new System.Drawing.Size(38, 13);
             this.label27.TabIndex = 28;
-            this.label27.Text = "Is Alive";
+            this.label27.Text = "Test B";
             // 
             // txtXIsAlive
             // 
@@ -1195,7 +1224,7 @@ namespace MyDummy
             // lblHResult
             // 
             this.lblHResult.AutoSize = true;
-            this.lblHResult.Location = new System.Drawing.Point(50, 121);
+            this.lblHResult.Location = new System.Drawing.Point(31, 121);
             this.lblHResult.Name = "lblHResult";
             this.lblHResult.Size = new System.Drawing.Size(14, 13);
             this.lblHResult.TabIndex = 14;
@@ -1208,7 +1237,7 @@ namespace MyDummy
             this.label9.Name = "label9";
             this.label9.Size = new System.Drawing.Size(38, 13);
             this.label9.TabIndex = 2;
-            this.label9.Text = "Health";
+            this.label9.Text = "Test A";
             // 
             // txtHealthX
             // 
@@ -1256,7 +1285,7 @@ namespace MyDummy
             this.tabControl1.Location = new System.Drawing.Point(0, -1);
             this.tabControl1.Name = "tabControl1";
             this.tabControl1.SelectedIndex = 0;
-            this.tabControl1.Size = new System.Drawing.Size(589, 529);
+            this.tabControl1.Size = new System.Drawing.Size(220, 120);
             this.tabControl1.TabIndex = 17;
             this.tabControl1.SelectedIndexChanged += new System.EventHandler(this.tabControl1_SelectedIndexChanged);
             // 
@@ -1268,13 +1297,26 @@ namespace MyDummy
             this.tabPage1.Location = new System.Drawing.Point(4, 22);
             this.tabPage1.Name = "tabPage1";
             this.tabPage1.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage1.Size = new System.Drawing.Size(581, 503);
+            this.tabPage1.Size = new System.Drawing.Size(212, 94);
             this.tabPage1.TabIndex = 0;
             this.tabPage1.Text = "Bot";
             this.tabPage1.UseVisualStyleBackColor = true;
             // 
+            // lblDebug
+            // 
+            this.lblDebug.AutoSize = true;
+            this.lblDebug.Location = new System.Drawing.Point(17, 7);
+            this.lblDebug.Name = "lblDebug";
+            this.lblDebug.Size = new System.Drawing.Size(39, 13);
+            this.lblDebug.TabIndex = 18;
+            this.lblDebug.Text = "Debug";
+            // 
             // tabPage2
             // 
+            this.tabPage2.Controls.Add(this.label22);
+            this.tabPage2.Controls.Add(this.label23);
+            this.tabPage2.Controls.Add(this.label20);
+            this.tabPage2.Controls.Add(this.label21);
             this.tabPage2.Controls.Add(this.rbHorde);
             this.tabPage2.Controls.Add(this.rbAlliance);
             this.tabPage2.Controls.Add(this.label39);
@@ -1322,15 +1364,51 @@ namespace MyDummy
             this.tabPage2.Location = new System.Drawing.Point(4, 22);
             this.tabPage2.Name = "tabPage2";
             this.tabPage2.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage2.Size = new System.Drawing.Size(581, 503);
+            this.tabPage2.Size = new System.Drawing.Size(212, 94);
             this.tabPage2.TabIndex = 1;
             this.tabPage2.Text = "Settings";
             this.tabPage2.UseVisualStyleBackColor = true;
             // 
+            // label22
+            // 
+            this.label22.AutoSize = true;
+            this.label22.Location = new System.Drawing.Point(266, 211);
+            this.label22.Name = "label22";
+            this.label22.Size = new System.Drawing.Size(37, 13);
+            this.label22.TabIndex = 57;
+            this.label22.Text = "(1114)";
+            // 
+            // label23
+            // 
+            this.label23.AutoSize = true;
+            this.label23.Location = new System.Drawing.Point(266, 237);
+            this.label23.Name = "label23";
+            this.label23.Size = new System.Drawing.Size(31, 13);
+            this.label23.TabIndex = 58;
+            this.label23.Text = "(765)";
+            // 
+            // label20
+            // 
+            this.label20.AutoSize = true;
+            this.label20.Location = new System.Drawing.Point(289, 130);
+            this.label20.Name = "label20";
+            this.label20.Size = new System.Drawing.Size(37, 13);
+            this.label20.TabIndex = 55;
+            this.label20.Text = "(2050)";
+            // 
+            // label21
+            // 
+            this.label21.AutoSize = true;
+            this.label21.Location = new System.Drawing.Point(289, 156);
+            this.label21.Name = "label21";
+            this.label21.Size = new System.Drawing.Size(25, 13);
+            this.label21.TabIndex = 56;
+            this.label21.Text = "(20)";
+            // 
             // rbHorde
             // 
             this.rbHorde.AutoSize = true;
-            this.rbHorde.Location = new System.Drawing.Point(333, 423);
+            this.rbHorde.Location = new System.Drawing.Point(517, 287);
             this.rbHorde.Name = "rbHorde";
             this.rbHorde.Size = new System.Drawing.Size(54, 17);
             this.rbHorde.TabIndex = 54;
@@ -1341,7 +1419,7 @@ namespace MyDummy
             // 
             this.rbAlliance.AutoSize = true;
             this.rbAlliance.Checked = true;
-            this.rbAlliance.Location = new System.Drawing.Point(333, 397);
+            this.rbAlliance.Location = new System.Drawing.Point(517, 261);
             this.rbAlliance.Name = "rbAlliance";
             this.rbAlliance.Size = new System.Drawing.Size(62, 17);
             this.rbAlliance.TabIndex = 53;
@@ -1352,7 +1430,7 @@ namespace MyDummy
             // label39
             // 
             this.label39.AutoSize = true;
-            this.label39.Location = new System.Drawing.Point(234, 388);
+            this.label39.Location = new System.Drawing.Point(490, 383);
             this.label39.Name = "label39";
             this.label39.Size = new System.Drawing.Size(43, 13);
             this.label39.TabIndex = 48;
@@ -1360,7 +1438,7 @@ namespace MyDummy
             // 
             // txtXInsignia
             // 
-            this.txtXInsignia.Location = new System.Drawing.Point(262, 420);
+            this.txtXInsignia.Location = new System.Drawing.Point(518, 415);
             this.txtXInsignia.Name = "txtXInsignia";
             this.txtXInsignia.Size = new System.Drawing.Size(44, 20);
             this.txtXInsignia.TabIndex = 49;
@@ -1369,7 +1447,7 @@ namespace MyDummy
             // 
             // txtYInsignia
             // 
-            this.txtYInsignia.Location = new System.Drawing.Point(263, 446);
+            this.txtYInsignia.Location = new System.Drawing.Point(519, 441);
             this.txtYInsignia.Name = "txtYInsignia";
             this.txtYInsignia.Size = new System.Drawing.Size(44, 20);
             this.txtYInsignia.TabIndex = 50;
@@ -1379,7 +1457,7 @@ namespace MyDummy
             // label40
             // 
             this.label40.AutoSize = true;
-            this.label40.Location = new System.Drawing.Point(234, 423);
+            this.label40.Location = new System.Drawing.Point(490, 418);
             this.label40.Name = "label40";
             this.label40.Size = new System.Drawing.Size(14, 13);
             this.label40.TabIndex = 51;
@@ -1388,7 +1466,7 @@ namespace MyDummy
             // label41
             // 
             this.label41.AutoSize = true;
-            this.label41.Location = new System.Drawing.Point(234, 449);
+            this.label41.Location = new System.Drawing.Point(490, 444);
             this.label41.Name = "label41";
             this.label41.Size = new System.Drawing.Size(14, 13);
             this.label41.TabIndex = 52;
@@ -1397,15 +1475,16 @@ namespace MyDummy
             // label36
             // 
             this.label36.AutoSize = true;
-            this.label36.Location = new System.Drawing.Point(123, 388);
+            this.label36.Location = new System.Drawing.Point(171, 155);
             this.label36.Name = "label36";
-            this.label36.Size = new System.Drawing.Size(55, 13);
+            this.label36.Size = new System.Drawing.Size(62, 13);
             this.label36.TabIndex = 43;
-            this.label36.Text = "Leave BG";
+            this.label36.Text = "Repair after";
+            this.label36.Click += new System.EventHandler(this.label36_Click);
             // 
             // txtXLeaveBG
             // 
-            this.txtXLeaveBG.Location = new System.Drawing.Point(151, 420);
+            this.txtXLeaveBG.Location = new System.Drawing.Point(513, 324);
             this.txtXLeaveBG.Name = "txtXLeaveBG";
             this.txtXLeaveBG.Size = new System.Drawing.Size(44, 20);
             this.txtXLeaveBG.TabIndex = 44;
@@ -1414,7 +1493,7 @@ namespace MyDummy
             // 
             // txtYLeaveBG
             // 
-            this.txtYLeaveBG.Location = new System.Drawing.Point(152, 446);
+            this.txtYLeaveBG.Location = new System.Drawing.Point(514, 350);
             this.txtYLeaveBG.Name = "txtYLeaveBG";
             this.txtYLeaveBG.Size = new System.Drawing.Size(44, 20);
             this.txtYLeaveBG.TabIndex = 45;
@@ -1424,52 +1503,52 @@ namespace MyDummy
             // label37
             // 
             this.label37.AutoSize = true;
-            this.label37.Location = new System.Drawing.Point(123, 423);
+            this.label37.Location = new System.Drawing.Point(94, 211);
             this.label37.Name = "label37";
-            this.label37.Size = new System.Drawing.Size(14, 13);
+            this.label37.Size = new System.Drawing.Size(37, 13);
             this.label37.TabIndex = 46;
-            this.label37.Text = "X";
+            this.label37.Text = "(1109)";
             // 
             // label38
             // 
             this.label38.AutoSize = true;
-            this.label38.Location = new System.Drawing.Point(123, 449);
+            this.label38.Location = new System.Drawing.Point(94, 237);
             this.label38.Name = "label38";
-            this.label38.Size = new System.Drawing.Size(14, 13);
+            this.label38.Size = new System.Drawing.Size(31, 13);
             this.label38.TabIndex = 47;
-            this.label38.Text = "Y";
+            this.label38.Text = "(765)";
             // 
             // label33
             // 
             this.label33.AutoSize = true;
-            this.label33.Location = new System.Drawing.Point(258, 111);
+            this.label33.Location = new System.Drawing.Point(181, 192);
             this.label33.Name = "label33";
-            this.label33.Size = new System.Drawing.Size(98, 13);
+            this.label33.Size = new System.Drawing.Size(121, 13);
             this.label33.TabIndex = 38;
-            this.label33.Text = "Battlemaster Leave";
+            this.label33.Text = "Out of fishing rod Ready";
             // 
             // txtXLeave
             // 
-            this.txtXLeave.Location = new System.Drawing.Point(286, 127);
+            this.txtXLeave.Location = new System.Drawing.Point(209, 208);
             this.txtXLeave.Name = "txtXLeave";
             this.txtXLeave.Size = new System.Drawing.Size(44, 20);
             this.txtXLeave.TabIndex = 39;
-            this.txtXLeave.Text = "1557";
+            this.txtXLeave.Text = "1114";
             this.txtXLeave.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
             // 
             // txtYLeave
             // 
-            this.txtYLeave.Location = new System.Drawing.Point(287, 153);
+            this.txtYLeave.Location = new System.Drawing.Point(210, 234);
             this.txtYLeave.Name = "txtYLeave";
             this.txtYLeave.Size = new System.Drawing.Size(44, 20);
             this.txtYLeave.TabIndex = 40;
-            this.txtYLeave.Text = "517";
+            this.txtYLeave.Text = "765";
             this.txtYLeave.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
             // 
             // label34
             // 
             this.label34.AutoSize = true;
-            this.label34.Location = new System.Drawing.Point(258, 130);
+            this.label34.Location = new System.Drawing.Point(181, 211);
             this.label34.Name = "label34";
             this.label34.Size = new System.Drawing.Size(14, 13);
             this.label34.TabIndex = 41;
@@ -1478,7 +1557,7 @@ namespace MyDummy
             // label35
             // 
             this.label35.AutoSize = true;
-            this.label35.Location = new System.Drawing.Point(258, 156);
+            this.label35.Location = new System.Drawing.Point(181, 237);
             this.label35.Name = "label35";
             this.label35.Size = new System.Drawing.Size(14, 13);
             this.label35.TabIndex = 42;
@@ -1496,42 +1575,45 @@ namespace MyDummy
             // label24
             // 
             this.label24.AutoSize = true;
-            this.label24.Location = new System.Drawing.Point(16, 388);
+            this.label24.Location = new System.Drawing.Point(171, 130);
             this.label24.Name = "label24";
-            this.label24.Size = new System.Drawing.Size(67, 26);
+            this.label24.Size = new System.Drawing.Size(56, 13);
             this.label24.TabIndex = 28;
-            this.label24.Text = "Open/Close \r\nWA Macro";
+            this.label24.Text = "Rod Forze";
+            this.label24.Click += new System.EventHandler(this.label24_Click);
             // 
             // label12
             // 
             this.label12.AutoSize = true;
-            this.label12.Location = new System.Drawing.Point(138, 111);
+            this.label12.Location = new System.Drawing.Point(16, 192);
             this.label12.Name = "label12";
-            this.label12.Size = new System.Drawing.Size(87, 13);
+            this.label12.Size = new System.Drawing.Size(92, 13);
             this.label12.TabIndex = 32;
-            this.label12.Text = "Battlemaster Join";
+            this.label12.Text = "Fishing rod Ready";
             // 
             // txtXOpenCloseWA
             // 
-            this.txtXOpenCloseWA.Location = new System.Drawing.Point(44, 420);
+            this.txtXOpenCloseWA.Location = new System.Drawing.Point(239, 127);
             this.txtXOpenCloseWA.Name = "txtXOpenCloseWA";
             this.txtXOpenCloseWA.Size = new System.Drawing.Size(44, 20);
             this.txtXOpenCloseWA.TabIndex = 29;
-            this.txtXOpenCloseWA.Text = " 1616";
+            this.txtXOpenCloseWA.Text = "2050";
             this.txtXOpenCloseWA.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
+            this.txtXOpenCloseWA.TextChanged += new System.EventHandler(this.txtXOpenCloseWA_TextChanged);
             // 
             // txtYOpenCloseWA
             // 
-            this.txtYOpenCloseWA.Location = new System.Drawing.Point(45, 446);
+            this.txtYOpenCloseWA.Location = new System.Drawing.Point(239, 152);
             this.txtYOpenCloseWA.Name = "txtYOpenCloseWA";
             this.txtYOpenCloseWA.Size = new System.Drawing.Size(44, 20);
             this.txtYOpenCloseWA.TabIndex = 30;
-            this.txtYOpenCloseWA.Text = "278";
+            this.txtYOpenCloseWA.Text = "20";
             this.txtYOpenCloseWA.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
+            this.txtYOpenCloseWA.TextChanged += new System.EventHandler(this.txtYOpenCloseWA_TextChanged);
             // 
             // txtXJoin
             // 
-            this.txtXJoin.Location = new System.Drawing.Point(166, 127);
+            this.txtXJoin.Location = new System.Drawing.Point(44, 208);
             this.txtXJoin.Name = "txtXJoin";
             this.txtXJoin.Size = new System.Drawing.Size(44, 20);
             this.txtXJoin.TabIndex = 33;
@@ -1541,15 +1623,15 @@ namespace MyDummy
             // label25
             // 
             this.label25.AutoSize = true;
-            this.label25.Location = new System.Drawing.Point(16, 423);
+            this.label25.Location = new System.Drawing.Point(94, 128);
             this.label25.Name = "label25";
-            this.label25.Size = new System.Drawing.Size(14, 13);
+            this.label25.Size = new System.Drawing.Size(31, 13);
             this.label25.TabIndex = 31;
-            this.label25.Text = "X";
+            this.label25.Text = "(912)";
             // 
             // txtYJoin
             // 
-            this.txtYJoin.Location = new System.Drawing.Point(167, 153);
+            this.txtYJoin.Location = new System.Drawing.Point(45, 234);
             this.txtYJoin.Name = "txtYJoin";
             this.txtYJoin.Size = new System.Drawing.Size(44, 20);
             this.txtYJoin.TabIndex = 34;
@@ -1559,16 +1641,16 @@ namespace MyDummy
             // label26
             // 
             this.label26.AutoSize = true;
-            this.label26.Location = new System.Drawing.Point(16, 449);
+            this.label26.Location = new System.Drawing.Point(94, 154);
             this.label26.Name = "label26";
-            this.label26.Size = new System.Drawing.Size(14, 13);
+            this.label26.Size = new System.Drawing.Size(31, 13);
             this.label26.TabIndex = 32;
-            this.label26.Text = "Y";
+            this.label26.Text = "(103)";
             // 
             // label18
             // 
             this.label18.AutoSize = true;
-            this.label18.Location = new System.Drawing.Point(138, 130);
+            this.label18.Location = new System.Drawing.Point(16, 211);
             this.label18.Name = "label18";
             this.label18.Size = new System.Drawing.Size(14, 13);
             this.label18.TabIndex = 35;
@@ -1577,7 +1659,7 @@ namespace MyDummy
             // label19
             // 
             this.label19.AutoSize = true;
-            this.label19.Location = new System.Drawing.Point(138, 156);
+            this.label19.Location = new System.Drawing.Point(16, 237);
             this.label19.Name = "label19";
             this.label19.Size = new System.Drawing.Size(14, 13);
             this.label19.TabIndex = 36;
@@ -1586,7 +1668,7 @@ namespace MyDummy
             // label8
             // 
             this.label8.AutoSize = true;
-            this.label8.Location = new System.Drawing.Point(10, 111);
+            this.label8.Location = new System.Drawing.Point(16, 109);
             this.label8.Name = "label8";
             this.label8.Size = new System.Drawing.Size(99, 13);
             this.label8.TabIndex = 27;
@@ -1594,26 +1676,26 @@ namespace MyDummy
             // 
             // txtXBattlemaster
             // 
-            this.txtXBattlemaster.Location = new System.Drawing.Point(38, 127);
+            this.txtXBattlemaster.Location = new System.Drawing.Point(44, 125);
             this.txtXBattlemaster.Name = "txtXBattlemaster";
             this.txtXBattlemaster.Size = new System.Drawing.Size(44, 20);
             this.txtXBattlemaster.TabIndex = 28;
-            this.txtXBattlemaster.Text = "914";
+            this.txtXBattlemaster.Text = "912";
             this.txtXBattlemaster.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
             // 
             // txtYBattlemaster
             // 
-            this.txtYBattlemaster.Location = new System.Drawing.Point(39, 153);
+            this.txtYBattlemaster.Location = new System.Drawing.Point(45, 151);
             this.txtYBattlemaster.Name = "txtYBattlemaster";
             this.txtYBattlemaster.Size = new System.Drawing.Size(44, 20);
             this.txtYBattlemaster.TabIndex = 29;
-            this.txtYBattlemaster.Text = "102";
+            this.txtYBattlemaster.Text = "103";
             this.txtYBattlemaster.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
             // 
             // label10
             // 
             this.label10.AutoSize = true;
-            this.label10.Location = new System.Drawing.Point(10, 130);
+            this.label10.Location = new System.Drawing.Point(16, 128);
             this.label10.Name = "label10";
             this.label10.Size = new System.Drawing.Size(14, 13);
             this.label10.TabIndex = 30;
@@ -1622,7 +1704,7 @@ namespace MyDummy
             // label11
             // 
             this.label11.AutoSize = true;
-            this.label11.Location = new System.Drawing.Point(10, 156);
+            this.label11.Location = new System.Drawing.Point(16, 154);
             this.label11.Name = "label11";
             this.label11.Size = new System.Drawing.Size(14, 13);
             this.label11.TabIndex = 31;
@@ -1710,20 +1792,11 @@ namespace MyDummy
             this.label15.TabIndex = 17;
             this.label15.Text = "Mouse Coords";
             // 
-            // lblDebug
-            // 
-            this.lblDebug.AutoSize = true;
-            this.lblDebug.Location = new System.Drawing.Point(17, 7);
-            this.lblDebug.Name = "lblDebug";
-            this.lblDebug.Size = new System.Drawing.Size(39, 13);
-            this.lblDebug.TabIndex = 18;
-            this.lblDebug.Text = "Debug";
-            // 
             // frm1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(587, 527);
+            this.ClientSize = new System.Drawing.Size(218, 118);
             this.Controls.Add(this.tabControl1);
             this.Name = "frm1";
             this.Text = "Dummy";
@@ -1756,6 +1829,7 @@ namespace MyDummy
         private void button2_Click(object sender, EventArgs e)
         {
             botIsRunning = false;
+            Application.Exit();
         }
 
         private Label label1;
@@ -1912,5 +1986,30 @@ namespace MyDummy
         }
 
         private Label lblDebug;
+
+        private void txtYOpenCloseWA_TextChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void label24_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void label36_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void txtXOpenCloseWA_TextChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private Label label20;
+        private Label label21;
+        private Label label22;
+        private Label label23;
     }
 }

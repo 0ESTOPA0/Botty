@@ -12,7 +12,7 @@ namespace MyDummy {
     
     
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.VisualStudio.Editors.SettingsDesigner.SettingsSingleFileGenerator", "16.4.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.VisualStudio.Editors.SettingsDesigner.SettingsSingleFileGenerator", "16.10.0.0")]
     internal sealed partial class Settings1 : global::System.Configuration.ApplicationSettingsBase {
         
         private static Settings1 defaultInstance = ((Settings1)(global::System.Configuration.ApplicationSettingsBase.Synchronized(new Settings1())));
@@ -97,7 +97,7 @@ namespace MyDummy {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("WowClassic")]
+        [global::System.Configuration.DefaultSettingValueAttribute("NewWorld")]
         public string ProcessName {
             get {
                 return ((string)(this["ProcessName"]));
@@ -109,7 +109,7 @@ namespace MyDummy {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("123")]
+        [global::System.Configuration.DefaultSettingValueAttribute("912")]
         public string txtXBattlemaster {
             get {
                 return ((string)(this["txtXBattlemaster"]));
@@ -121,7 +121,7 @@ namespace MyDummy {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("123")]
+        [global::System.Configuration.DefaultSettingValueAttribute("103")]
         public string txtYBattlemaster {
             get {
                 return ((string)(this["txtYBattlemaster"]));
@@ -133,7 +133,7 @@ namespace MyDummy {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("123")]
+        [global::System.Configuration.DefaultSettingValueAttribute("1109")]
         public string txtXJoin {
             get {
                 return ((string)(this["txtXJoin"]));
@@ -145,7 +145,7 @@ namespace MyDummy {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("123")]
+        [global::System.Configuration.DefaultSettingValueAttribute("765")]
         public string txtYJoin {
             get {
                 return ((string)(this["txtYJoin"]));
@@ -157,7 +157,7 @@ namespace MyDummy {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("123")]
+        [global::System.Configuration.DefaultSettingValueAttribute("2050")]
         public string txtXOpenCloseWA {
             get {
                 return ((string)(this["txtXOpenCloseWA"]));
@@ -169,7 +169,7 @@ namespace MyDummy {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("123")]
+        [global::System.Configuration.DefaultSettingValueAttribute("20")]
         public string txtYOpenCloseWA {
             get {
                 return ((string)(this["txtYOpenCloseWA"]));
@@ -205,7 +205,7 @@ namespace MyDummy {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("123")]
+        [global::System.Configuration.DefaultSettingValueAttribute("1114")]
         public string txtXLeave {
             get {
                 return ((string)(this["txtXLeave"]));
@@ -217,7 +217,7 @@ namespace MyDummy {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("123")]
+        [global::System.Configuration.DefaultSettingValueAttribute("765")]
         public string txtYLeave {
             get {
                 return ((string)(this["txtYLeave"]));

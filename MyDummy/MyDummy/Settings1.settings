@@ -21,25 +21,25 @@
       <Value Profile="(Default)">288</Value>
     </Setting>
     <Setting Name="ProcessName" Type="System.String" Scope="User">
-      <Value Profile="(Default)">WowClassic</Value>
+      <Value Profile="(Default)">NewWorld</Value>
     </Setting>
     <Setting Name="txtXBattlemaster" Type="System.String" Scope="User">
-      <Value Profile="(Default)">123</Value>
+      <Value Profile="(Default)">912</Value>
     </Setting>
     <Setting Name="txtYBattlemaster" Type="System.String" Scope="User">
-      <Value Profile="(Default)">123</Value>
+      <Value Profile="(Default)">103</Value>
     </Setting>
     <Setting Name="txtXJoin" Type="System.String" Scope="User">
-      <Value Profile="(Default)">123</Value>
+      <Value Profile="(Default)">1109</Value>
     </Setting>
     <Setting Name="txtYJoin" Type="System.String" Scope="User">
-      <Value Profile="(Default)">123</Value>
+      <Value Profile="(Default)">765</Value>
     </Setting>
     <Setting Name="txtXOpenCloseWA" Type="System.String" Scope="User">
-      <Value Profile="(Default)">123</Value>
+      <Value Profile="(Default)">2050</Value>
     </Setting>
     <Setting Name="txtYOpenCloseWA" Type="System.String" Scope="User">
-      <Value Profile="(Default)">123</Value>
+      <Value Profile="(Default)">20</Value>
     </Setting>
     <Setting Name="txtXIsAlive" Type="System.String" Scope="User">
       <Value Profile="(Default)">123</Value>
@@ -48,10 +48,10 @@
       <Value Profile="(Default)">123</Value>
     </Setting>
     <Setting Name="txtXLeave" Type="System.String" Scope="User">
-      <Value Profile="(Default)">123</Value>
+      <Value Profile="(Default)">1114</Value>
     </Setting>
     <Setting Name="txtYLeave" Type="System.String" Scope="User">
-      <Value Profile="(Default)">123</Value>
+      <Value Profile="(Default)">765</Value>
     </Setting>
     <Setting Name="txtXLeaveBG" Type="System.String" Scope="User">
       <Value Profile="(Default)">123</Value>
